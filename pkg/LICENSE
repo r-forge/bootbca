@@ -1,0 +1,76 @@
+ This package was based on function bcanon in the "ORPHANED" R package
+ bootstrap_2012.04-1 from cran.r-project.org/web/packages/bootstrap/
+ but was significantly enhanced.  Functional differences include:
+
+   1. Implement adaptive bootstrap.
+   2. Reduce memory required by a factor of nboot.
+   3. Utilize the quantile function from stats, replacing code that contained
+      an off-by-one error.
+   4. Add option to use different types of quantiles.
+   5. Eliminate superfluous returns; add returns for bootstrap estimate,
+      attained precision, and the number of bootstrap replications done.
+   6. Change default alpha to just c(0.025,0.975).
+   7. Add some error checks.
+   8. If all values in x are the same, skip the bootstrap and return
+      theta(x,...) for all requested quantiles.
+
+ These enhancements were made by David Flater <dflater@nist.gov> in the
+ course of official duties.  Pursuant to Title 17 Section 105 of the
+ United States Code, the enhancements are not subject to copyright
+ protection and are in the public domain.  To the extent that this is a
+ derivative work, however, the previous copyrights would apply.
+
+ The R bootstrap package rev. 2012.04-1 was ported from StatLib in 2000 by
+ Friedrich Leisch and last modified by Kjetil Halvorsen in 2012.  Its
+ LICENSE file says:
+
+   YEAR: 2000
+   COPYRIGHT HOLDER: Rob Tibshirani, Friedrich Leisch
+   ORGANIZATION: Stanford University
+
+ Its DESCRIPTION file says:
+ License: BSD_3_clause + file LICENSE
+
+ The referenced BSD_3_clause is the following (from
+ http://cran.r-project.org/web/licenses/BSD_3_clause):
+
+   Copyright (c) <YEAR>, <COPYRIGHT HOLDER>
+
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions are
+   met:
+
+       Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+
+       Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in
+       the documentation and/or other materials provided with the
+       distribution.
+
+       Neither the name of the <ORGANIZATION> nor the names of its
+       contributors may be used to endorse or promote products derived
+       from this software without specific prior written permission.
+
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+   HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ Subsequently, maintenance of the bootstrap package was resumed by Scott
+ Kostyshak (rev. 2014.4).
+
+ The S StatLib package was by Rob Tibshirani to accompany the book "An
+ Introduction to the Bootstrap" by Bradley Efron and Robert J. Tibshirani,
+ 1993.
+
+ NIST assumes no responsibility for use of this software by other parties
+ and makes no guarantees, expressed or implied, about its quality,
+ reliability, or any other characteristic.
