@@ -29,23 +29,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <a href="http://r-forge.r-project.org/"><img src="http://<?php echo $themeroot; ?>/imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a> </td> </tr>
 </table>
 
-
 <!-- get project title  -->
+<h1>Welcome to the bootBCa project!</h1>
 <!-- own website starts here, the following may be changed as you like -->
 
-<?php if ($handle=fopen('http://'.$domain.'/export/projtitl.php?group_name='.$group_name,'r')){
-$contents = '';
-while (!feof($handle)) {
-	$contents .= fread($handle, 8192);
-}
-fclose($handle);
-echo $contents; } ?>
+<p>The package bootBCa exports a single function, BCa, which finds
+confidence intervals using Efron's nonparametric bias-corrected and
+accelerated (BC<sub><i>a</i></sub>) bootstrap method.&nbsp; It is an enhanced
+derivative of the function bcanon, forked from <a
+href="http://cran.r-project.org/web/packages/bootstrap/">bootstrap_2012.04-1</a>.&nbsp;
+Adaptive determination of the number of bootstrap replications is supported
+and the amount of memory required is less by a factor of nboot.</p>
 
-<!-- end of project description -->
+<p>For details please see the package documentation, which is linked here in <a href="manual/BCa.html">HTML</a> and <a href="bootBCa-manual.pdf">PDF</a> formats and included in the package in Rd format.</p>
 
-<p> No content added. </p>
-
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p> The R-Forge <strong>project summary page</strong> you can find <a
+href="http://<?php echo $domain; ?>/projects/<?php echo $group_name;
+?>/"><strong>here</strong></a>.</p>
 
 </body>
 </html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Function to find nonparametric BCa intervals</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for BCa {bootBCa}"><tr><td>BCa {bootBCa}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Function to find nonparametric BCa intervals</h2>
+
+<h3>Description</h3>
+
+<p>The package bootBCa exports only a single function, BCa.
+</p>
+<p>Function BCa finds confidence intervals using Efron's nonparametric
+bias-corrected and accelerated (BC<i>a</i>) bootstrap method.
+</p>
+<p>Function BCa was based on function <a href="../../bootstrap/html/bcanon.html">bcanon</a> in the R package
+bootstrap_2012.04-1 but was significantly enhanced.  Functional differences
+include:
+</p>
+
+<ol>
+<li><p>Implement adaptive bootstrap.
+</p>
+</li>
+<li><p>Reduce memory required by a factor of nboot.
+</p>
+</li>
+<li><p>Utilize the quantile function from stats, replacing code that contained
+an off-by-one error.*
+</p>
+</li>
+<li><p>Add option to use different types of quantiles.
+</p>
+</li>
+<li><p>Eliminate superfluous returns; add returns for bootstrap estimate,
+attained precision, and the number of bootstrap replications done.
+</p>
+</li>
+<li><p>Change default alpha to just c(0.025,0.975).
+</p>
+</li>
+<li><p>Add some error checks.
+</p>
+</li>
+<li><p>If all values in x are the same, skip the bootstrap and return
+theta(x,...) for all requested quantiles.**
+</p>
+</li></ol>
+
+<p>* This bug persists in bootstrap_2014.4 but has been reported to the new
+maintainer and should be fixed in the next version.
+</p>
+<p>** In this degenerate case, boot_1.3-9 crashes and bootstrap_2012.04-1 returns NAs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+BCa(x, delta, theta, ..., alpha = c(0.025, 0.975), verbose = F,
+    M = 25000, Mlimit = 1500000, qtype = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>The data (vector).
+</p>
+</td></tr>
+<tr valign="top"><td><code>delta</code></td>
+<td>
+
+<p>Requested precision.  The number of bootstrap replications is adapted dynamically to deliver the requested precision using the procedure described in JCGM 101:2008 section 7.9.4.  Beware, the number of replications needed grows explosively if delta is too small.  If delta is NA, just do M replications (non-adaptive).
+</p>
+</td></tr>
+<tr valign="top"><td><code>theta</code></td>
+<td>
+
+<p>Function returning the statistic of interest (e.g., mean).
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+<p>Additional arguments for theta (optional).
+</p>
+</td></tr>
+<tr valign="top"><td><code>alpha</code></td>
+<td>
+
+<p>Vector of quantiles for the desired BC<i>a</i> confidence intervals.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+
+<p>Set verbose to T to get a progress report on the adaptive bootstrap process and other details as the BCa function runs.
+</p>
+</td></tr>
+<tr valign="top"><td><code>M</code></td>
+<td>
+
+<p>Bootstrap replication batch size.  Adaptive does at least 2M
+replications before it can terminate.
+</p>
+</td></tr>
+<tr valign="top"><td><code>Mlimit</code></td>
+<td>
+
+<p>Stop increasing the number of bootstrap replications if it takes more than
+this number to make delta.  When delta is NA this parameter is irrelevant.
+</p>
+</td></tr>
+<tr valign="top"><td><code>qtype</code></td>
+<td>
+
+<p>Use this type of quantile.  The value of qtype is an integer between 1 and 9
+selecting one of the nine quantile algorithms implemented by the
+<a href="../../stats/html/quantile.html">quantile</a> function in <a href="../../stats/html/stats%2dpackage.html">stats</a>.  The
+default, type 1, is the inverse of the empirical distribution function with
+no interpolation between values and is closest to what was originally
+implemented in <a href="../../bootstrap/html/bcanon.html">bcanon</a>.  See also Hyndman and Fan.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The output is a vector:
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>[1], &quot;nboot&quot;</code></td>
+<td>
+<p>Number of bootstrap replications done.</p>
+</td></tr>
+<tr valign="top"><td><code>[2], &quot;prec&quot;</code></td>
+<td>
+<p>Estimate of attained precision.  This can exceed delta if the
+iterations limit Mlimit is reached before the requested precision
+is achieved.  For non-adaptive, this is NA or 0.</p>
+</td></tr>
+<tr valign="top"><td><code>[3], &quot;est&quot;</code></td>
+<td>
+<p>Bootstrap estimate (mean of the <i>theta*</i> values).</p>
+</td></tr>
+<tr valign="top"><td><code>rest, &quot;0.xxx&quot;</code></td>
+<td>
+<p>Points corresponding to alpha values.</p>
+</td></tr>
+</table>
+
+
+<h3>Stop conditions and special cases</h3>
+
+
+<ol>
+<li><p>Most invalid parameter values result in an immediate stop.
+</p>
+</li>
+<li><p>If theta returns a non-scalar value (i.e., a value of length not equal to 1), the function will stop with &ldquo;BCa: theta returned a non-scalar value.&rdquo;
+</p>
+</li>
+<li><p>If all values in x are the same, including if x is of length 1, no bootstrapping is done.  Instead, zero is returned for the number of bootstrap replications and the estimate of attained precision, and theta(x,...) is returned for the bootstrap estimate and all requested quantiles.  In this special case, theta(x,...) is allowed to be non-numeric, infinite, or NaN.
+</p>
+</li>
+<li><p>In all other cases, if theta returns a non-finite or non-numeric value, including NA or NaN, the function will stop with &ldquo;theta returned a non-(finite,numeric) value.&rdquo;
+</p>
+</li>
+<li><p>If the value of theta is always the same after removing any single element from x, the function will stop with &ldquo;acceleration is indeterminate for insensitive function.&rdquo;  In such cases, other kinds of bootstrap intervals (not implemented in this package) can still be used.
+</p>
+</li>
+<li><p>The function will stop with &ldquo;BCa: alpha value too extreme for these data&rdquo; if an alpha value is so close to 0 or 1 that the BC<i>a</i> interval becomes invalid.
+</p>
+</li></ol>
+
+
+
+<h3>Limitations of the BCa function</h3>
+
+<p>There is no support for doing multiple statistics simultaneously, nor does the function parallelize internally.  However, multiple invocations of the function can profitably be run in parallel on different data (e.g., different treatments of an experiment).
+</p>
+<p>As described in JCGM 101:2008 section 7.9.4, the convergence criterion for the
+adaptive method corresponds to a coverage probability of approximately 95 %.
+In other words, even when the returned estimate of attained precision is
+numerically less than delta and the number of bootstrap replications done was
+not limited by Mlimit, there is approximately a 5 % probability that the
+precision attained was actually worse than delta (numerically greater than
+delta).
+</p>
+<p>Stopping when theta returns infinity is overkill in the non-adaptive case
+where an infinity in the set of <i>theta*</i> values might
+merely cause the bootstrap estimate to become infinite.  On the other hand,
+an infinity arising during the jacknife is fatal, even in non-adaptive, so
+continuing with business as usual after the theta function has been
+demonstrated to return infinities is arguably masking a fault.
+</p>
+
+
+<h3>Contraindications for use of the BC<i>a</i> method</h3>
+
+<p>Like the ordinary percentile interval, the BC<i>a</i> interval becomes
+inaccurate when the number of bootstrap replications is not much larger than
+<i>1/min(alpha,1-alpha)</i> because there are not
+enough <i>theta*</i> values from which to extract the
+desired quantile (e.g., one cannot plausibly estimate a 99 % quantile given
+fewer than 100 values).  However, the bias correction and acceleration
+adjustments made in BC<i>a</i> can result in a more extreme quantile being
+needed.  Therefore, BC<i>a</i> intervals are contraindicated if it is not
+possible to use a generously large value of M.
+</p>
+<p>Although it depends on the distribution, the empirical error rate of
+BC<i>a</i> intervals tends to significantly exceed the nominal error rate
+when the sample size is very small (on the order of 10).  Examples are given
+in Davison and Hinkley and Carpenter and Bithell.
+</p>
+<p>Carpenter and Bithell show that the coverage error for BC<i>a</i>
+increases as alpha values approach 0 or 1.  Specifically, Efron's function
+</p>
+<p align="center"><i>z0
++ (z0+zalpha)/(1-a(z0+zalpha))</i></p>
+<p> approaches <i>z0 - 1/a</i> instead
+of infinity as <i>zalpha</i> becomes infinite.  There is thus
+concern about coverage error when alpha values become &ldquo;extreme&rdquo; in
+context of the acceleration and bias estimates arising from the data
+provided.  In the maintainer's experience, with non-contrived data, this
+particular error remains insignificant for all practically useful values of
+alpha.  Unequivocally, however, Efron's function has a pole where <i>z0+zalpha = 1/a</i> and produces invalid results when
+<i>a(z0+zalpha) &gt;= 1</i>.  The BCa
+function stops with &quot;BCa: alpha value too extreme for these data&quot; when this
+condition arises.
+</p>
+<p>If the theta function returns few distinct values, whether due to a small or
+homogeneous sample or an intrinsic property of theta, the bias correction
+and consequently the BC<i>a</i> interval become erratic.  For
+example, if x=c(1,2) and theta=mean, only three distinct values are returned
+(25 % 1, 50 % 1.5, 25 % 2), <i>z0</i> is forced away from zero, and the intervals
+produced by BC<i>a</i> are skewed.  In this case the simpler methods that
+do not attempt to correct for bias are more reliable:
+</p>
+<PRE>
+library('boot')
+boot.ci(boot.out=boot(data=c(1,2),statistic=function(x,index)
+mean(x[index]),R=10000),type=c("norm","basic","perc","bca"),
+conf=seq(0.7,0.9,0.1))
+
+Intervals : 
+Level      Normal              Basic         
+70%   ( 1.135,  1.863 )   ( 1.000,  2.000 )   
+80%   ( 1.050,  1.948 )   ( 1.000,  2.000 )   
+90%   ( 0.922,  2.076 )   ( 1.000,  2.000 )  
+
+Level     Percentile            BCa          
+70%   ( 1.0,  2.0 )   ( 1.0,  1.5 )   
+80%   ( 1.0,  2.0 )   ( 1.0,  1.5 )   
+90%   ( 1.0,  2.0 )   ( 1.0,  1.5 )  
+</PRE>
+
+<h3>Acknowledgment</h3>
+
+<p>Thanks to William F. Guthrie of NIST's Statistical Engineering Division
+for helpful reviews and support.
+</p>
+
+
+<h3>License</h3>
+
+<p>This package was based on function bcanon in the &ldquo;ORPHANED&rdquo; R package
+bootstrap_2012.04-1 from
+<a href="http://cran.r-project.org/web/packages/bootstrap/">http://cran.r-project.org/web/packages/bootstrap/</a> but was significantly
+enhanced.  These enhancements were made by David Flater &lt;dflater@nist.gov&gt; in
+the course of official duties.  Pursuant to Title 17 Section 105 of the
+United States Code, the enhancements are not subject to copyright protection
+and are in the public domain.  To the extent that this is a derivative work,
+however, the previous copyrights would apply.
+</p>
+<p>The R bootstrap package rev. 2012.04-1 was ported from StatLib in 2000 by
+Friedrich Leisch and last modified by Kjetil Halvorsen in 2012.  Its
+LICENSE file says:
+</p>
+<PRE>   YEAR: 2000
+   COPYRIGHT HOLDER: Rob Tibshirani, Friedrich Leisch
+   ORGANIZATION: Stanford University
+</PRE>
+Its DESCRIPTION file says:
+<code>License: BSD_3_clause + file LICENSE</code>.
+The referenced BSD_3_clause is the following (from
+<a href="http://cran.r-project.org/web/licenses/BSD_3_clause">http://cran.r-project.org/web/licenses/BSD_3_clause</a>):
+<PRE>Copyright (c) &lt;YEAR&gt;, &lt;COPYRIGHT HOLDER&gt;
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+    Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+    Neither the name of the &lt;ORGANIZATION&gt; nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</PRE>
+Subsequently, maintenance of the bootstrap package was resumed by Scott
+Kostyshak (rev. 2014.4).
+The S StatLib package was by Rob Tibshirani to accompany the book <EM>An
+Introduction to the Bootstrap</EM> by Bradley Efron and Robert J. Tibshirani,
+1993.
+NIST assumes no responsibility for use of this software by other parties
+and makes no guarantees, expressed or implied, about its quality,
+reliability, or any other characteristic.
+
+
+<h3>Author(s)</h3>
+
+<p>S original, from StatLib, by Rob Tibshirani.  R port by Friedrich Leisch.  Enhancements by David Flater.
+</p>
+<p>Maintainer: David Flater &lt;dflater@nist.gov&gt;
+</p>
+
+
+<h3>References</h3>
+
+<p>Bradley Efron.  Better bootstrap confidence intervals.  Journal of the American Statistical Association, 82(397):171&ndash;185, March 1987.  <a href="http://www.jstor.org/stable/2289144">http://www.jstor.org/stable/2289144</a>.  See also the comments and rejoinder that follow on pages 186&ndash;200, <a href="http://www.jstor.org/stable/i314281">http://www.jstor.org/stable/i314281</a>.
+</p>
+<p>Bradley Efron and Robert J. Tibshirani.  <EM>An Introduction to the Bootstrap</EM>.  Chapman &amp; Hall, 1993.
+</p>
+<p>Thomas J. DiCiccio and Bradley Efron.  Bootstrap Confidence Intervals.  Statistical Science, 11(3):189&ndash;212, August 1996.  <a href="http://www.jstor.org/stable/2246110">http://www.jstor.org/stable/2246110</a>.  See also the comments and rejoinder that follow on pages 212&ndash;228, <a href="http://www.jstor.org/stable/i313095">http://www.jstor.org/stable/i313095</a>.
+</p>
+<p>Joint Committee for Guides in Metrology.  Evaluation of measurement data&mdash;Supplement 1 to the &ldquo;Guide to the expression of uncertainty in measurement&rdquo;&mdash;Propagation of distributions using a Monte Carlo method.  JCGM 101:2008, <a href="http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf">http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf</a>.
+</p>
+<p>Rob J. Hyndman and Yanan Fan.  Sample Quantiles in Statistical Packages.  The American Statistician, 50(4):361&ndash;365, November 1996.  <a href="http://www.jstor.org/stable/2684934">http://www.jstor.org/stable/2684934</a>.
+</p>
+<p>Anthony C. Davison and David V. Hinkley.  <EM>Bootstrap Methods and their
+Application</EM>.  Cambridge University Press, 1997.
+</p>
+<p>James Carpenter and John Bithell.  Bootstrap confidence intervals: when, which, what?  A practical guide for medical statisticians.  Statistics in Medicine, 19(9):1141&ndash;1164, May 2000.  <a href="http://dx.doi.org/10.1002/(SICI)1097-0258(20000515)19:9<1141::AID-SIM479>3.0.CO;2-F">http://dx.doi.org/10.1002/(SICI)1097-0258(20000515)19:9&lt;1141::AID-SIM479&gt;3.0.CO;2-F</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../bootstrap/html/bootstrap.html">bootstrap</a></code>, <code><a href="../../boot/html/boot.html">boot</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data &lt;- rnorm(n=1000,mean=20,sd=5)
+
+# 95 % confidence interval of mean with an adaptive replication count.
+print(BCa(data,0.01,mean))
+
+# 90 % confidence interval of mean, non-adaptive replication count.
+print(BCa(data,NA,mean,alpha=c(0.05,0.95),M=10000))
+
+# User-defined function with an arbitrary extra parameter.
+fudgedmean &lt;- function(x, fudge_factor) {
+  mean(x) + fudge_factor
+}
+print(BCa(data,0.01,fudgedmean,3))
+
+# Degenerate case: 0 0 0 0 0
+print(BCa(rep(5,100),0.01,sd))
+
+# Degenerate case, single sample: 0 0 NA NA NA
+print(BCa(5,0.01,sd))
+</pre>
+
+<hr><div align="center">[Package <em>bootBCa</em> version 1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
