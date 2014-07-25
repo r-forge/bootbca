@@ -1,0 +1,17 @@
+Package: bootBCa
+Type: Package
+Title: Function to find nonparametric BCa intervals
+Version: 1.0
+Date: 2014-07-03
+Author: S original, from StatLib, by Rob Tibshirani.  R port by
+        Friedrich Leisch.  Enhancements by David Flater.
+Maintainer: David Flater <dflater@nist.gov>
+Description: Function BCa finds confidence intervals using Efron's
+  nonparametric bias-corrected and accelerated (BCa) bootstrap method.  It is
+  an enhanced derivative of the function bcanon, forked from
+  bootstrap_2012.04-1.  Adaptive determination of the number of bootstrap
+  replications is supported and the amount of memory required is less by a
+  factor of nboot.
+License: BSD_3_clause + file LICENSE
+NeedsCompilation: no
+Depends: stats, R (>= 2.10.0)
