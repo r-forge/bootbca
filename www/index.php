@@ -43,9 +43,13 @@ and the amount of memory required is less by a factor of nboot.</p>
 
 <p>For details please see the package documentation, which is linked here in <a href="manual/BCa.html">HTML</a> and <a href="bootBCa-manual.pdf">PDF</a> formats and included in the package in Rd format.</p>
 
-<p> The R-Forge <strong>project summary page</strong> you can find <a
-href="http://<?php echo $domain; ?>/projects/<?php echo $group_name;
-?>/"><strong>here</strong></a>.</p>
+<p>The package can be downloaded from <a
+href="http://r-forge.r-project.org/R/?group_id=1928">here</a> or installed
+directly with the R command <code>install.packages("bootBCa", repos="http://R-Forge.R-project.org")</code>.</p>
+
+<hr/>
+
+<p>Back to <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name;?>/">R-Forge project summary page</a> for bootBCa</p>
 
 </body>
 </html>
