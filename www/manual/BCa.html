@@ -16,7 +16,7 @@
 bias-corrected and accelerated (BC<i>a</i>) bootstrap method.
 </p>
 <p>Function BCa was based on function <a href="http://www.inside-r.org/packages/cran/bootstrap/docs/bcanon">bcanon</a> in the R package
-bootstrap_2012.04-1 but was significantly enhanced.  Functional differences
+<a href="http://cran.r-project.org/web/packages/bootstrap/index.html">bootstrap_2012.04-1</a> but was significantly enhanced.  Functional differences
 include:
 </p>
 
@@ -76,7 +76,7 @@ BCa(x, delta, theta, ..., alpha = c(0.025, 0.975), verbose = F,
 <tr valign="top"><td><code>delta</code></td>
 <td>
 
-<p>Requested precision.  The number of bootstrap replications is adapted dynamically to deliver the requested precision using the procedure described in JCGM 101:2008 section 7.9.4.  Beware, the number of replications needed grows explosively if delta is too small.  If delta is NA, just do M replications (non-adaptive).
+<p>Requested precision.  The number of bootstrap replications is adapted dynamically to deliver the requested precision using the procedure described in <a href="#GUMs1">JCGM 101:2008</a> section 7.9.4.  Beware, the number of replications needed grows explosively if delta is too small.  If delta is NA, just do M replications (non-adaptive).
 </p>
 </td></tr>
 <tr valign="top"><td><code>theta</code></td>
@@ -186,7 +186,7 @@ is achieved.  For non-adaptive, this is NA or 0.</p>
 
 <p>There is no support for doing multiple statistics simultaneously, nor does the function parallelize internally.  However, multiple invocations of the function can profitably be run in parallel on different data (e.g., different treatments of an experiment).
 </p>
-<p>As described in JCGM 101:2008 section 7.9.4, the convergence criterion for the
+<p>As described in <a href="#GUMs1">JCGM 101:2008</a> section 7.9.4, the convergence criterion for the
 adaptive method corresponds to a coverage probability of approximately 95 %.
 In other words, even when the returned estimate of attained precision is
 numerically less than delta and the number of bootstrap replications done was
@@ -218,7 +218,7 @@ possible to use a generously large value of M.
 <p>Although it depends on the distribution, the empirical error rate of
 BC<i>a</i> intervals tends to significantly exceed the nominal error rate
 when the sample size is very small (on the order of 10).  Examples are given
-in Davison and Hinkley and Carpenter and Bithell.
+in <a href="#DavisonHinkley">Davison and Hinkley</a> and <a href="#CarpenterBithell">Carpenter and Bithell</a>.
 </p>
 <p>Carpenter and Bithell show that the coverage error for BC<i>a</i>
 increases as alpha values approach 0 or 1.  Specifically, Efron's function
@@ -348,14 +348,14 @@ reliability, or any other characteristic.</p>
 </p>
 <p>Thomas J. DiCiccio and Bradley Efron.  Bootstrap Confidence Intervals.  Statistical Science, 11(3):189&ndash;212, August 1996.  <a href="http://www.jstor.org/stable/2246110">http://www.jstor.org/stable/2246110</a>.  See also the comments and rejoinder that follow on pages 212&ndash;228, <a href="http://www.jstor.org/stable/i313095">http://www.jstor.org/stable/i313095</a>.
 </p>
-<p>Joint Committee for Guides in Metrology.  Evaluation of measurement data&mdash;Supplement 1 to the &ldquo;Guide to the expression of uncertainty in measurement&rdquo;&mdash;Propagation of distributions using a Monte Carlo method.  JCGM 101:2008, <a href="http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf">http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf</a>.
+<p id="GUMs1">Joint Committee for Guides in Metrology.  Evaluation of measurement data&mdash;Supplement 1 to the &ldquo;Guide to the expression of uncertainty in measurement&rdquo;&mdash;Propagation of distributions using a Monte Carlo method.  JCGM 101:2008, <a href="http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf">http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf</a>.
 </p>
 <p>Rob J. Hyndman and Yanan Fan.  Sample Quantiles in Statistical Packages.  The American Statistician, 50(4):361&ndash;365, November 1996.  <a href="http://www.jstor.org/stable/2684934">http://www.jstor.org/stable/2684934</a>.
 </p>
-<p>Anthony C. Davison and David V. Hinkley.  <EM>Bootstrap Methods and their
+<p id="DavisonHinkley">Anthony C. Davison and David V. Hinkley.  <EM>Bootstrap Methods and their
 Application</EM>.  Cambridge University Press, 1997.
 </p>
-<p>James Carpenter and John Bithell.  Bootstrap confidence intervals: when, which, what?  A practical guide for medical statisticians.  Statistics in Medicine, 19(9):1141&ndash;1164, May 2000.  <a href="http://dx.doi.org/10.1002/(SICI)1097-0258(20000515)19:9<1141::AID-SIM479>3.0.CO;2-F">http://dx.doi.org/10.1002/(SICI)1097-0258(20000515)19:9&lt;1141::AID-SIM479&gt;3.0.CO;2-F</a>.
+<p id="CarpenterBithell">James Carpenter and John Bithell.  Bootstrap confidence intervals: when, which, what?  A practical guide for medical statisticians.  Statistics in Medicine, 19(9):1141&ndash;1164, May 2000.  <a href="http://dx.doi.org/10.1002/(SICI)1097-0258(20000515)19:9<1141::AID-SIM479>3.0.CO;2-F">http://dx.doi.org/10.1002/(SICI)1097-0258(20000515)19:9&lt;1141::AID-SIM479&gt;3.0.CO;2-F</a>.
 </p>
 
 
