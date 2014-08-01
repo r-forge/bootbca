@@ -41,6 +41,12 @@ href="http://cran.r-project.org/web/packages/bootstrap/">bootstrap_2012.04-1</a>
 Adaptive determination of the number of bootstrap replications is supported
 and the amount of memory required is less by a factor of nboot.</p>
 
+<p>Although the BCa function does not parallelize internally, multiple
+invocations of the function can profitably be run in parallel on different
+data (e.g., different treatments of an experiment).&nbsp; One script that
+does this is <a href="https://rubygems.org/gems/GECS">GECS (Gem for
+Experimental Computer Science)</a>.</p>
+
 <p>For details please see the package documentation, which is linked here in <a href="manual/BCa.html">HTML</a> and <a href="bootBCa-manual.pdf">PDF</a> formats and included in the package in Rd format.</p>
 
 <p>The package can be downloaded from <a
