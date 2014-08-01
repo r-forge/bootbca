@@ -13,7 +13,7 @@
 <p>The package bootBCa exports only a single function, BCa.
 </p>
 <p>Function BCa finds confidence intervals using Efron's nonparametric
-bias-corrected and accelerated (BC<i>a</i>) bootstrap method.
+bias-corrected and accelerated (BC<sub><i>a</i></sub>) bootstrap method.
 </p>
 <p>Function BCa was based on function <a href="http://www.inside-r.org/packages/cran/bootstrap/docs/bcanon">bcanon</a> in the R package
 <a href="http://cran.r-project.org/web/packages/bootstrap/index.html">bootstrap_2012.04-1</a> but was significantly enhanced.  Functional differences
@@ -94,7 +94,7 @@ BCa(x, delta, theta, ..., alpha = c(0.025, 0.975), verbose = F,
 <tr valign="top"><td><code>alpha</code></td>
 <td>
 
-<p>Vector of quantiles for the desired BC<i>a</i> confidence intervals.
+<p>Vector of quantiles for the desired BC<sub><i>a</i></sub> confidence intervals.
 </p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
@@ -125,7 +125,7 @@ selecting one of the nine quantile algorithms implemented by the
 <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/quantile.html">quantile</a> function in <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/stats-package.html">stats</a>.  The
 default, type 1, is the inverse of the empirical distribution function with
 no interpolation between values and is closest to what was originally
-implemented in <a href="http://www.inside-r.org/packages/cran/bootstrap/docs/bcanon">bcanon</a>.  See also Hyndman and Fan.
+implemented in <a href="http://www.inside-r.org/packages/cran/bootstrap/docs/bcanon">bcanon</a>.  See also <a href="#HyndmanFan">Hyndman and Fan</a>.
 </p>
 </td></tr>
 </table>
@@ -148,7 +148,7 @@ is achieved.  For non-adaptive, this is NA or 0.</p>
 </td></tr>
 <tr valign="top"><td><code>[3], &quot;est&quot;</code></td>
 <td>
-<p>Bootstrap estimate (mean of the <i>theta*</i> values).</p>
+<p>Bootstrap estimate (mean of the <i>&theta;&#x0302;*</i> values).</p>
 </td></tr>
 <tr valign="top"><td><code>rest, &quot;0.xxx&quot;</code></td>
 <td>
@@ -176,7 +176,7 @@ is achieved.  For non-adaptive, this is NA or 0.</p>
 <li><p>If the value of theta is always the same after removing any single element from x, the function will stop with &ldquo;acceleration is indeterminate for insensitive function.&rdquo;  In such cases, other kinds of bootstrap intervals (not implemented in this package) can still be used.
 </p>
 </li>
-<li><p>The function will stop with &ldquo;BCa: alpha value too extreme for these data&rdquo; if an alpha value is so close to 0 or 1 that the BC<i>a</i> interval becomes invalid.
+<li><p>The function will stop with &ldquo;BCa: alpha value too extreme for these data&rdquo; if an alpha value is so close to 0 or 1 that the BC<sub><i>a</i></sub> interval becomes invalid.
 </p>
 </li></ol>
 
@@ -195,7 +195,7 @@ precision attained was actually worse than delta (numerically greater than
 delta).
 </p>
 <p>Stopping when theta returns infinity is overkill in the non-adaptive case
-where an infinity in the set of <i>theta*</i> values might
+where an infinity in the set of <i>&theta;&#x0302;*</i> values might
 merely cause the bootstrap estimate to become infinite.  On the other hand,
 an infinity arising during the jacknife is fatal, even in non-adaptive, so
 continuing with business as usual after the theta function has been
@@ -203,45 +203,70 @@ demonstrated to return infinities is arguably masking a fault.
 </p>
 
 
-<h3>Contraindications for use of the BC<i>a</i> method</h3>
+<h3>Contraindications for use of the BC<sub><i>a</i></sub> method</h3>
 
-<p>Like the ordinary percentile interval, the BC<i>a</i> interval becomes
+<p>Like the ordinary percentile interval, the BC<sub><i>a</i></sub> interval becomes
 inaccurate when the number of bootstrap replications is not much larger than
-<i>1/min(alpha,1-alpha)</i> because there are not
-enough <i>theta*</i> values from which to extract the
+<i>1/min(&alpha;,1&minus;&alpha;)</i> because there are not
+enough <i>&theta;&#x0302;*</i> values from which to extract the
 desired quantile (e.g., one cannot plausibly estimate a 99 % quantile given
 fewer than 100 values).  However, the bias correction and acceleration
-adjustments made in BC<i>a</i> can result in a more extreme quantile being
-needed.  Therefore, BC<i>a</i> intervals are contraindicated if it is not
+adjustments made in BC<sub><i>a</i></sub> can result in a more extreme quantile being
+needed.  Therefore, BC<sub><i>a</i></sub> intervals are contraindicated if it is not
 possible to use a generously large value of M.
 </p>
 <p>Although it depends on the distribution, the empirical error rate of
-BC<i>a</i> intervals tends to significantly exceed the nominal error rate
+BC<sub><i>a</i></sub> intervals tends to significantly exceed the nominal error rate
 when the sample size is very small (on the order of 10).  Examples are given
 in <a href="#DavisonHinkley">Davison and Hinkley</a> and <a href="#CarpenterBithell">Carpenter and Bithell</a>.
 </p>
-<p>Carpenter and Bithell show that the coverage error for BC<i>a</i>
+<p>Carpenter and Bithell show that the coverage error for BC<sub><i>a</i></sub>
 increases as alpha values approach 0 or 1.  Specifically, Efron's function
+<i>z<sub>0</sub>&nbsp;+&nbsp;(z<sub>0</sub>+z<sup>(&alpha;)</sup>)/(1&minus;a(z<sub>0</sub>+z<sup>(&alpha;)</sup>))</i>,</p>
+<p align="center">
+<a href="http://en.wikipedia.org/wiki/MathML#Web_browsers">MathML</a>:&nbsp;&nbsp;
+  <math xmlns="http://www.w3.org/1998/Math/MathML" alttext="z0 + (z0+zalpha)/(1-a(z0+zalpha))">
+    <mrow>
+      <msub><mi>z</mi><mn>0</mn></msub>
+      <mo>+</mo>
+      <mfrac>
+	<mrow>
+	  <msub><mi>z</mi><mn>0</mn></msub>
+	  <mo>+</mo>
+	  <msup><mi>z</mi><mfenced><mi>&alpha;</mi></mfenced></msup>
+	</mrow>
+	<mrow>
+	  <mn>1</mn>
+	  <mo>-</mo>
+	  <mi>a</mi>
+	  <mo>&InvisibleTimes;</mo>
+	  <mfenced separators="">
+	    <msub><mi>z</mi><mn>0</mn></msub>
+	    <mo>+</mo>
+	    <msup><mi>z</mi><mfenced><mi>&alpha;</mi></mfenced></msup>
+	  </mfenced>
+	</mrow>
+      </mfrac>
+    </mrow>
+  </math>
 </p>
-<p align="center"><i>z0
-+ (z0+zalpha)/(1-a(z0+zalpha))</i></p>
-<p> approaches <i>z0 - 1/a</i> instead
-of infinity as <i>zalpha</i> becomes infinite.  There is thus
+<p>approaches <i>z<sub>0</sub> &minus; 1/a</i> instead
+of infinity as <i>z<sup>(&alpha;)</sup></i> becomes infinite.  There is thus
 concern about coverage error when alpha values become &ldquo;extreme&rdquo; in
 context of the acceleration and bias estimates arising from the data
 provided.  In the maintainer's experience, with non-contrived data, this
 particular error remains insignificant for all practically useful values of
-alpha.  Unequivocally, however, Efron's function has a pole where <i>z0+zalpha = 1/a</i> and produces invalid results when
-<i>a(z0+zalpha) &gt;= 1</i>.  The BCa
+alpha.  Unequivocally, however, Efron's function has a pole where <i>z<sub>0</sub>+z<sup>(&alpha;)</sup> = 1/a</i> and produces invalid results when
+<i>a(z<sub>0</sub>+z<sup>(&alpha;)</sup>) &ge; 1</i>.  The BCa
 function stops with &quot;BCa: alpha value too extreme for these data&quot; when this
 condition arises.
 </p>
 <p>If the theta function returns few distinct values, whether due to a small or
 homogeneous sample or an intrinsic property of theta, the bias correction
-and consequently the BC<i>a</i> interval become erratic.  For
+and consequently the BC<sub><i>a</i></sub> interval become erratic.  For
 example, if x=c(1,2) and theta=mean, only three distinct values are returned
-(25 % 1, 50 % 1.5, 25 % 2), <i>z0</i> is forced away from zero, and the intervals
-produced by BC<i>a</i> are skewed.  In this case the simpler methods that
+(25 % 1, 50 % 1.5, 25 % 2), <i>z<sub>0</sub></i> is forced away from zero, and the intervals
+produced by BC<sub><i>a</i></sub> are skewed.  In this case the simpler methods that
 do not attempt to correct for bias are more reliable:
 </p>
 <PRE>
@@ -350,7 +375,7 @@ reliability, or any other characteristic.</p>
 </p>
 <p id="GUMs1">Joint Committee for Guides in Metrology.  Evaluation of measurement data&mdash;Supplement 1 to the &ldquo;Guide to the expression of uncertainty in measurement&rdquo;&mdash;Propagation of distributions using a Monte Carlo method.  JCGM 101:2008, <a href="http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf">http://www.bipm.org/utils/common/documents/jcgm/JCGM_101_2008_E.pdf</a>.
 </p>
-<p>Rob J. Hyndman and Yanan Fan.  Sample Quantiles in Statistical Packages.  The American Statistician, 50(4):361&ndash;365, November 1996.  <a href="http://www.jstor.org/stable/2684934">http://www.jstor.org/stable/2684934</a>.
+<p id="HyndmanFan">Rob J. Hyndman and Yanan Fan.  Sample Quantiles in Statistical Packages.  The American Statistician, 50(4):361&ndash;365, November 1996.  <a href="http://www.jstor.org/stable/2684934">http://www.jstor.org/stable/2684934</a>.
 </p>
 <p id="DavisonHinkley">Anthony C. Davison and David V. Hinkley.  <EM>Bootstrap Methods and their
 Application</EM>.  Cambridge University Press, 1997.
